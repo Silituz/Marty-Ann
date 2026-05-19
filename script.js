@@ -355,7 +355,7 @@ restartButton.addEventListener("click", () => {
   document.querySelectorAll(".reason-token").forEach((button) => button.classList.remove("is-found"));
 
   if (reasonText) {
-    reasonText.textContent = "Tap a token to reveal a birthday wish.";
+    reasonText.textContent = "Tap a birthday power-up to reveal a wish.";
   }
 
   setScreen(0);
