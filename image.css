@@ -1,0 +1,43 @@
+.photo-placeholder,
+.final-photo,
+.modal-preview,
+.memory-strip button,
+.gallery-grid button {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-placeholder img,
+.final-photo img,
+.modal-preview img,
+.memory-strip button img,
+.gallery-grid button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder.has-image,
+.final-photo.has-image,
+.modal-preview.has-image,
+.memory-strip button.has-image,
+.gallery-grid button.has-image {
+  border-style: solid;
+  background: rgba(5, 7, 18, 0.64);
+}
+
+.photo-placeholder.has-image::after,
+.memory-strip button.has-image::after,
+.gallery-grid button.has-image::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 122, 24, 0.22), transparent 42%),
+    linear-gradient(0deg, rgba(5, 7, 18, 0.28), transparent 46%);
+}
+
+.modal-preview.has-image {
+  padding: 0;
+}
