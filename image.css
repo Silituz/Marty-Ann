@@ -69,12 +69,15 @@
 }
 
 .photo-placeholder {
-  right: 24px;
-  bottom: 20px;
-  width: min(74%, 282px);
-  height: min(78%, 292px);
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(74%, 286px);
+  height: auto;
+  aspect-ratio: 1 / 1;
   z-index: 3;
-  transform: rotate(2deg);
+  transform: translate(-50%, -50%) rotate(1.5deg);
 }
 
 .intro-screen .copy {
@@ -88,22 +91,22 @@
 }
 
 .intro-screen .word-one {
-  top: 34px;
-  left: 18px;
+  top: 28px;
+  left: 28px;
   z-index: 4;
   transform: rotate(-7deg);
 }
 
 .intro-screen .word-two {
-  right: 12px;
-  top: 88px;
+  right: 24px;
+  top: 82px;
   z-index: 4;
   transform: rotate(8deg);
 }
 
 .intro-screen .word-three {
-  left: 18px;
-  bottom: 38px;
+  left: 30px;
+  bottom: 34px;
   z-index: 4;
   transform: rotate(5deg);
 }
@@ -206,10 +209,14 @@
   }
 
   .photo-placeholder {
-    right: 18px;
-    bottom: 18px;
-    width: min(72%, 218px);
-    height: min(72%, 230px);
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    width: min(72%, 224px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%) rotate(1.5deg);
   }
 
   .cover-main {
