@@ -26,16 +26,21 @@ const noReplies = [
   "Almost a comic-book yes"
 ];
 
-const galleryItems = [
-  "assets/photo-01.jpg",
-  "assets/photo-02.jpg",
-  "assets/photo-03.jpg",
-  "assets/photo-04.jpg",
-  "assets/photo-05.jpg",
-  "assets/photo-06.jpg",
-  "assets/photo-07.jpg",
-  "assets/photo-08.jpg",
-  "assets/photo-09.jpg"
+const galleryItems = Array.from({ length: 9 }, (_, index) => index + 1);
+const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
+const imageNamePatterns = [
+  (number) => `photo-${String(number).padStart(2, "0")}`,
+  (number) => `photo-${number}`,
+  (number) => `bild-${String(number).padStart(2, "0")}`,
+  (number) => `bild-${number}`,
+  (number) => `Bild-${number}`,
+  (number) => `Bild ${number}`,
+  (number) => `bild ${number}`,
+  (number) => `bild${number}`,
+  (number) => `Bild${number}`,
+  (number) => `image-${String(number).padStart(2, "0")}`,
+  (number) => `image-${number}`,
+  (number) => String(number)
 ];
 
 let currentScreen = 0;
@@ -43,6 +48,82 @@ let toastTimer;
 let galleryBuilt = false;
 let secretClicks = Number(sessionStorage.getItem("martySecretClicks") || "0");
 let secretUnlocked = sessionStorage.getItem("martySecretUnlocked") === "true";
+const imageCache = new Map();
+
+function imageCandidates(numberOrPath) {
+  if (typeof numberOrPath === "string" && numberOrPath.includes("/")) {
+    return [numberOrPath];
+  }
+
+  const number = Number(numberOrPath);
+  return imageNamePatterns.flatMap((pattern) => (
+    imageExtensions.map((extension) => `assets/${pattern(number)}.${extension}`)
+  ));
+}
+
+function tryImage(src) {
+  if (imageCache.has(src)) {
+    return Promise.resolve(imageCache.get(src) ? src : "");
+  }
+
+  return new Promise((resolve) => {
+    const image = new Image();
+
+    image.onload = () => {
+      imageCache.set(src, true);
+      resolve(src);
+    };
+
+    image.onerror = () => {
+      imageCache.set(src, false);
+      resolve("");
+    };
+
+    image.src = encodeURI(src);
+  });
+}
+
+async function resolveImage(numberOrPath) {
+  const candidates = imageCandidates(numberOrPath);
+
+  for (const candidate of candidates) {
+    const found = await tryImage(candidate);
+
+    if (found) {
+      return found;
+    }
+  }
+
+  return "";
+}
+
+function placeImage(target, src, label) {
+  target.classList.add("has-image");
+  target.innerHTML = "";
+
+  const image = document.createElement("img");
+  image.src = encodeURI(src);
+  image.alt = label;
+  image.loading = "lazy";
+  target.append(image);
+}
+
+async function hydratePhotoTarget(target) {
+  const key = target.dataset.photoKey || target.dataset.photo;
+  const label = target.getAttribute("aria-label") || target.textContent.trim() || "Birthday photo";
+  const src = await resolveImage(key);
+
+  if (src) {
+    target.dataset.photo = src;
+    placeImage(target, src, label);
+  }
+}
+
+function hydratePhotos() {
+  document.querySelectorAll("[data-photo-key]").forEach((target) => {
+    hydratePhotoTarget(target);
+  });
+}
 
 function setScreen(nextScreen) {
   currentScreen = Math.max(0, Math.min(nextScreen, screens.length - 1));
@@ -184,9 +265,17 @@ function showReason(button) {
   createBurst(button, "WISH");
 }
 
-function openPhoto(src) {
-  modalPreview.textContent = src.includes("photo") ? src.replace("assets/", "").replace(".jpg", "") : "Photo coming soon";
-  modalCaption.textContent = `Add ${src} later to show the real picture here.`;
+async function openPhoto(photoReference) {
+  const src = await resolveImage(photoReference);
+
+  if (src) {
+    placeImage(modalPreview, src, "Birthday photo preview");
+    modalCaption.textContent = src.replace("assets/", "");
+  } else {
+    modalPreview.classList.remove("has-image");
+    modalPreview.innerHTML = "Photo coming soon";
+    modalCaption.textContent = "Add photos as photo-01.jpg, Bild 1.png, bild-1.webp, or similar in the assets folder.";
+  }
 
   if (typeof modal.showModal === "function") {
     modal.showModal();
@@ -198,20 +287,21 @@ function buildGallery() {
     return;
   }
 
-  galleryItems.forEach((src, index) => {
+  galleryItems.forEach((item, index) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.dataset.photo = src;
+    button.dataset.photoKey = String(item);
     button.setAttribute("aria-label", `Future photo ${index + 1}`);
-    button.textContent = `Photo ${index + 1}`;
+    button.innerHTML = `<span>Photo ${index + 1}</span>`;
     galleryGrid.append(button);
+    hydratePhotoTarget(button);
   });
 
   galleryBuilt = true;
 }
 
 document.addEventListener("click", (event) => {
-  const photoButton = event.target.closest("[data-photo]");
+  const photoButton = event.target.closest("[data-photo], [data-photo-key]");
   const nextButton = event.target.closest("[data-next]");
   const noButton = event.target.closest("[data-no]");
   const reasonButton = event.target.closest("[data-reason]");
@@ -224,7 +314,7 @@ document.addEventListener("click", (event) => {
 
   if (photoButton) {
     countSecretMoment();
-    openPhoto(photoButton.dataset.photo);
+    openPhoto(photoButton.dataset.photo || photoButton.dataset.photoKey);
     return;
   }
 
@@ -310,3 +400,4 @@ if (secretModal) {
 }
 
 setScreen(0);
+hydratePhotos();
