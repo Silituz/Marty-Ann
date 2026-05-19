@@ -53,15 +53,18 @@
 }
 
 .intro-screen {
-  grid-template-rows: minmax(300px, 1fr) auto auto auto;
+  align-content: start;
+  grid-template-rows: auto auto auto auto;
   gap: 10px;
   padding-bottom: 18px;
 }
 
 .hero-comic {
-  min-height: min(390px, 43svh);
+  height: clamp(250px, 34svh, 318px);
+  min-height: 0;
   margin-bottom: 0;
   background: rgba(5, 7, 18, 0.72);
+  isolation: isolate;
 }
 
 .hero-comic::before,
@@ -76,6 +79,7 @@
 }
 
 .photo-placeholder {
+  position: absolute;
   inset: 8px;
   width: auto;
   height: auto;
@@ -87,8 +91,10 @@
 }
 
 .intro-screen .photo-placeholder img {
-  object-fit: cover;
-  background: transparent;
+  object-fit: contain;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 209, 102, 0.18), transparent 9rem),
+    linear-gradient(135deg, rgba(255, 122, 24, 0.5), rgba(23, 59, 136, 0.42));
 }
 
 .intro-screen .copy {
@@ -209,13 +215,14 @@
 
 @media (max-height: 740px) {
   .intro-screen {
-    grid-template-rows: minmax(238px, 0.78fr) auto auto auto;
+    grid-template-rows: auto auto auto auto;
     gap: 8px;
     padding-bottom: 14px;
   }
 
   .hero-comic {
-    min-height: min(285px, 36svh);
+    height: clamp(218px, 31svh, 265px);
+    min-height: 0;
     margin-top: 8px;
   }
 
@@ -397,4 +404,14 @@
   45% {
     filter: brightness(1.12);
   }
+}
+
+.secret-badge {
+  border-color: rgba(255, 209, 102, 0.72);
+  color: var(--orange);
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 209, 102, 0.24), transparent 3.5rem),
+    rgba(8, 10, 21, 0.88);
+  text-shadow: 0 0 14px rgba(255, 122, 24, 0.86);
+  font-size: 3.1rem;
 }
