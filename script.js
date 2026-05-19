@@ -26,15 +26,15 @@ const noReplies = [
 ];
 
 const galleryItems = [
-  "assets/photo-01.jpg",
-  "assets/photo-02.jpg",
-  "assets/photo-03.jpg",
-  "assets/photo-04.jpg",
-  "assets/photo-05.jpg",
-  "assets/photo-06.jpg",
-  "assets/photo-07.jpg",
-  "assets/photo-08.jpg",
-  "assets/photo-09.jpg"
+  "assets/photo-01.png",
+  "assets/photo-02.png",
+  "assets/photo-03.png",
+  "assets/photo-04.png",
+  "assets/photo-05.png",
+  "assets/photo-06.png",
+  "assets/photo-07.png",
+  "assets/photo-08.png",
+  "assets/photo-09.png"
 ];
 
 let currentScreen = 0;
