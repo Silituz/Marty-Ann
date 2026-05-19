@@ -8,9 +8,22 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Happy Birthday, Marty-Ann">
     <meta property="og:description" content="A friendly birthday surprise with comic-book energy and a lot of orange.">
+    <meta property="og:image" content="https://silituz.github.io/Marty-Ann/assets/photo-01.jpg">
+    <meta property="og:image" content="https://silituz.github.io/Marty-Ann/assets/photo-01.png">
+    <meta property="og:image" content="https://silituz.github.io/Marty-Ann/assets/Bild%201.jpg">
+    <meta property="og:image" content="https://silituz.github.io/Marty-Ann/assets/Bild%201.png">
+    <meta property="og:image" content="https://silituz.github.io/Marty-Ann/assets/bild-1.jpg">
+    <meta property="og:image" content="https://silituz.github.io/Marty-Ann/assets/bild-1.png">
+    <meta property="og:image:alt" content="Birthday preview image for Marty-Ann">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Happy Birthday, Marty-Ann">
+    <meta name="twitter:description" content="A friendly birthday surprise with comic-book energy and a lot of orange.">
+    <meta name="twitter:image" content="https://silituz.github.io/Marty-Ann/assets/photo-01.jpg">
+    <link rel="image_src" href="https://silituz.github.io/Marty-Ann/assets/photo-01.jpg">
     <title>Happy Birthday, Marty-Ann</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="comic.css">
+    <link rel="stylesheet" href="image.css">
   </head>
   <body>
     <main class="page-shell">
@@ -58,7 +71,7 @@
             <span class="burst-word word-three">WEB</span>
             <span class="web-badge"></span>
             <span class="cute-mask" aria-hidden="true"></span>
-            <div class="photo-placeholder">
+            <div class="photo-placeholder" data-photo-key="1">
               <span>Photo coming soon</span>
             </div>
           </div>
@@ -159,7 +172,7 @@
 
         <section class="screen final-screen" data-screen="6">
           <p class="eyebrow">Final panel</p>
-          <div class="final-photo" data-photo="assets/photo-01.jpg">
+          <div class="final-photo" data-photo-key="1">
             <span>Your picture here</span>
           </div>
           <h2>You are celebrated today</h2>
@@ -176,9 +189,9 @@
           </div>
           <p class="reason-text" id="reasonText">Tap a token to reveal a birthday wish.</p>
           <div class="memory-strip" aria-label="Future photo placeholders">
-            <button type="button" data-photo="assets/photo-02.jpg"><span>Photo 2</span></button>
-            <button type="button" data-photo="assets/photo-03.jpg"><span>Photo 3</span></button>
-            <button type="button" data-photo="assets/photo-04.jpg"><span>Photo 4</span></button>
+            <button type="button" data-photo-key="2"><span>Photo 2</span></button>
+            <button type="button" data-photo-key="3"><span>Photo 3</span></button>
+            <button type="button" data-photo-key="4"><span>Photo 4</span></button>
           </div>
           <button class="secondary-action" type="button" id="galleryButton">Open future gallery</button>
           <button class="primary-action" type="button" id="restartButton">Play again</button>
