@@ -48,6 +48,7 @@ let toastTimer;
 let galleryBuilt = false;
 let secretClicks = Number(sessionStorage.getItem("martySecretClicks") || "0");
 let secretUnlocked = sessionStorage.getItem("martySecretUnlocked") === "true";
+let secretShownThisVisit = false;
 const imageCache = new Map();
 
 function imageCandidates(numberOrPath) {
@@ -180,6 +181,11 @@ function flashFrameFight() {
 
 function countSecretMoment() {
   if (secretUnlocked) {
+    if (!secretShownThisVisit && secretModal && typeof secretModal.showModal === "function") {
+      secretShownThisVisit = true;
+      secretModal.showModal();
+    }
+
     return;
   }
 
@@ -195,6 +201,7 @@ function countSecretMoment() {
     sessionStorage.setItem("martySecretUnlocked", "true");
 
     if (secretModal && typeof secretModal.showModal === "function") {
+      secretShownThisVisit = true;
       secretModal.showModal();
     }
   }
