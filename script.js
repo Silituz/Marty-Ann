@@ -84,6 +84,74 @@ function createBurst(origin, label = "YES") {
   }
 }
 
+function clearHeroEffects(zone) {
+  if (!zone) {
+    return;
+  }
+
+  zone.classList.remove("is-tugging", "is-smashing", "is-shattering", "is-cheering");
+}
+
+function createButtonFragments(button) {
+  const zone = button.closest(".hero-answer-zone");
+
+  if (!zone) {
+    return;
+  }
+
+  const buttonRect = button.getBoundingClientRect();
+  const zoneRect = zone.getBoundingClientRect();
+
+  for (let i = 0; i < 9; i += 1) {
+    const fragment = document.createElement("span");
+    const column = i % 3;
+    const row = Math.floor(i / 3);
+
+    fragment.className = "button-fragment";
+    fragment.style.left = `${buttonRect.left - zoneRect.left + 36 + column * 44}px`;
+    fragment.style.top = `${buttonRect.top - zoneRect.top + 12 + row * 10}px`;
+    fragment.style.setProperty("--fx", `${Math.round(Math.random() * 120 - 60)}px`);
+    fragment.style.setProperty("--fy", `${Math.round(-34 - Math.random() * 74)}px`);
+    fragment.style.setProperty("--fr", `${Math.round(Math.random() * 240 - 120)}deg`);
+
+    zone.append(fragment);
+    setTimeout(() => fragment.remove(), 820);
+  }
+}
+
+function playHeroNoEffect(button, noCount) {
+  const zone = button.closest(".hero-answer-zone");
+
+  if (!zone) {
+    return;
+  }
+
+  clearHeroEffects(zone);
+
+  if (noCount % 3 === 1) {
+    zone.classList.add("is-tugging");
+  } else if (noCount % 3 === 2) {
+    zone.classList.add("is-smashing");
+  } else {
+    zone.classList.add("is-shattering");
+    createButtonFragments(button);
+  }
+
+  setTimeout(() => clearHeroEffects(zone), 900);
+}
+
+function playHeroNextEffect(button) {
+  const zone = button.closest(".hero-answer-zone");
+
+  if (!zone) {
+    return;
+  }
+
+  clearHeroEffects(zone);
+  zone.classList.add("is-cheering");
+  setTimeout(() => clearHeroEffects(zone), 720);
+}
+
 function countSecretMoment() {
   if (secretUnlocked) {
     return;
@@ -146,6 +214,7 @@ function sweetenNo(button) {
   button.style.setProperty("--no-y", `${y}px`);
   button.style.setProperty("--no-tilt", `${tilt}deg`);
   createBurst(button, "WEB");
+  playHeroNoEffect(button, noCount);
 
   if (noCount < 3) {
     showToast("The No button got caught in a cute web.");
@@ -153,8 +222,8 @@ function sweetenNo(button) {
   }
 
   button.textContent = "Next";
-  button.classList.remove("is-playful");
-  button.classList.add("is-glow");
+  button.classList.remove("is-playful", "no");
+  button.classList.add("is-glow", "next");
   button.dataset.next = "";
   button.removeAttribute("data-no");
   showToast("The web turned No into Next.");
@@ -223,6 +292,7 @@ document.addEventListener("click", (event) => {
   if (nextButton) {
     countSecretMoment();
     createBurst(nextButton);
+    playHeroNextEffect(nextButton);
     setScreen(currentScreen + 1);
   }
 });
@@ -236,7 +306,8 @@ musicButton.addEventListener("click", (event) => {
 restartButton.addEventListener("click", () => {
   document.querySelectorAll(".answer.no, .answer[data-no-count]").forEach((button, index) => {
     const labels = ["No", "No", "No"];
-    button.classList.remove("is-playful", "is-glow");
+    button.classList.remove("is-playful", "is-glow", "next");
+    button.classList.add("no");
     button.style.removeProperty("--no-x");
     button.style.removeProperty("--no-y");
     button.style.removeProperty("--no-tilt");
