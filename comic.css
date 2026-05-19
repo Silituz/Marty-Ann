@@ -1,0 +1,203 @@
+.web-ring {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(255, 255, 255, 0.24) 50%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(255, 255, 255, 0.24) 50%, transparent 51%),
+    linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.2) 50%, transparent 51%),
+    linear-gradient(-45deg, transparent 49%, rgba(255, 255, 255, 0.2) 50%, transparent 51%);
+  opacity: 0.8;
+}
+
+.web-ring::before,
+.web-ring::after {
+  position: absolute;
+  inset: 48px;
+  content: "";
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+}
+
+.web-ring::after {
+  inset: 98px;
+}
+
+.web-ring-a {
+  top: -110px;
+  right: -92px;
+}
+
+.web-ring-b {
+  bottom: -132px;
+  left: -104px;
+  transform: rotate(18deg);
+}
+
+.hero-comic .cute-mask,
+.hero-comic .web-badge,
+.hero-comic .burst-word,
+.hero-comic .photo-placeholder {
+  z-index: 2;
+}
+
+.cute-mask {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 104px;
+  height: 78px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50% 50% 44% 44%;
+  background:
+    radial-gradient(ellipse at 33% 48%, #fff8f1 0 12px, transparent 13px),
+    radial-gradient(ellipse at 67% 48%, #fff8f1 0 12px, transparent 13px),
+    linear-gradient(135deg, var(--red), var(--orange-hot));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
+  transform: translate(-50%, -50%) rotate(-3deg);
+}
+
+.cute-mask::before,
+.cute-mask::after {
+  position: absolute;
+  top: 30px;
+  width: 26px;
+  height: 16px;
+  content: "";
+  border-radius: 50%;
+  background: #0c1026;
+}
+
+.cute-mask::before {
+  left: 20px;
+  transform: rotate(12deg);
+}
+
+.cute-mask::after {
+  right: 20px;
+  transform: rotate(-12deg);
+}
+
+.word-three {
+  left: 28px;
+  bottom: 34px;
+  color: #fff8f1;
+  background: var(--blue);
+  rotate: 5deg;
+}
+
+.panel-card::after {
+  position: absolute;
+  right: -42px;
+  bottom: -42px;
+  width: 132px;
+  height: 132px;
+  content: "";
+  border: 2px solid rgba(255, 255, 255, 0.32);
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(255, 255, 255, 0.28) 50%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(255, 255, 255, 0.28) 50%, transparent 51%),
+    linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.2) 50%, transparent 51%);
+}
+
+.panel-card h2,
+.panel-card p {
+  z-index: 2;
+}
+
+.panel-web {
+  position: absolute;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 49%, rgba(255, 255, 255, 0.34) 50%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, rgba(255, 255, 255, 0.34) 50%, transparent 51%),
+    linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.24) 50%, transparent 51%),
+    linear-gradient(-45deg, transparent 49%, rgba(255, 255, 255, 0.24) 50%, transparent 51%);
+  opacity: 0.72;
+}
+
+.panel-web-top {
+  top: -52px;
+  right: -38px;
+}
+
+.panel-web-right {
+  right: -48px;
+  bottom: 22px;
+  transform: rotate(20deg);
+}
+
+.panel-web-bottom {
+  left: -52px;
+  bottom: -42px;
+  transform: rotate(-12deg);
+}
+
+.sticker {
+  position: absolute;
+  z-index: 3;
+  padding: 8px 10px;
+  border: 2px solid #100918;
+  border-radius: 8px;
+  color: #120810;
+  background: #fff4c8;
+  box-shadow: 4px 4px 0 #100918;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.sticker-a {
+  top: 18px;
+  right: 18px;
+  transform: rotate(5deg);
+}
+
+.sticker-b {
+  top: 18px;
+  left: 18px;
+  transform: rotate(-5deg);
+}
+
+.sticker-c {
+  top: 18px;
+  right: 18px;
+  transform: rotate(4deg);
+}
+
+.answer.next {
+  color: #120810;
+  background: linear-gradient(135deg, #fff4c8, var(--orange));
+  box-shadow: 0 14px 28px rgba(255, 122, 24, 0.28);
+}
+
+.answer.next::after {
+  content: "  >";
+}
+
+.answer.no {
+  color: #fff8f1;
+  background:
+    linear-gradient(135deg, rgba(23, 59, 136, 0.72), rgba(200, 25, 46, 0.68)),
+    rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+.answer.no::before {
+  position: absolute;
+  inset: -34px;
+  content: "";
+  opacity: 0.28;
+  background:
+    linear-gradient(90deg, transparent 49%, #fff 50%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, #fff 50%, transparent 51%),
+    linear-gradient(45deg, transparent 49%, #fff 50%, transparent 51%);
+  transform: rotate(12deg);
+}
