@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ff7a18">
+    <meta name="description" content="A friendly birthday surprise for Marty-Ann.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Happy Birthday, Marty-Ann">
+    <meta property="og:description" content="A friendly birthday surprise with comic-book energy and a lot of orange.">
+    <title>Happy Birthday, Marty-Ann</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <div class="comic-backdrop" aria-hidden="true">
+        <span class="web-line web-line-a"></span>
+        <span class="web-line web-line-b"></span>
+        <span class="web-line web-line-c"></span>
+        <span class="halftone halftone-a"></span>
+        <span class="halftone halftone-b"></span>
+      </div>
+
+      <section class="birthday-app" aria-live="polite">
+        <header class="topbar">
+          <button class="icon-button" id="musicButton" type="button" aria-label="Music placeholder">
+            <span aria-hidden="true">M</span>
+          </button>
+          <div class="progress" aria-hidden="true">
+            <span class="progress-dot active"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+            <span class="progress-dot"></span>
+          </div>
+        </header>
+
+        <section class="screen active intro-screen" data-screen="0">
+          <div class="hero-comic" role="img" aria-label="Comic-style orange superhero birthday card">
+            <span class="burst-word word-one">POW</span>
+            <span class="burst-word word-two">WOW</span>
+            <span class="web-badge"></span>
+            <div class="photo-placeholder">
+              <span>Photo coming soon</span>
+            </div>
+          </div>
+          <p class="eyebrow">Birthday mission</p>
+          <h1>Happy Birthday, Marty-Ann</h1>
+          <p class="copy">
+            This little page is made to bring you a big smile from far away.
+            No love letter, no drama, just a bright birthday surprise for a wonderful friend.
+          </p>
+          <button class="primary-action" type="button" data-next>
+            Start the surprise
+          </button>
+        </section>
+
+        <section class="screen question-screen" data-screen="1">
+          <div class="panel-card tilted-left">
+            <p class="panel-label">Scene 01</p>
+            <h2>Ready to swing into your birthday?</h2>
+          </div>
+          <p class="copy">
+            Today is officially your orange-powered hero day.
+          </p>
+          <div class="answer-grid">
+            <button class="answer yes" type="button" data-next>Absolutely</button>
+            <button class="answer no" type="button" data-no>Not yet</button>
+          </div>
+        </section>
+
+        <section class="screen question-screen" data-screen="2">
+          <div class="panel-card tilted-right">
+            <p class="panel-label">Scene 02</p>
+            <h2>Can this page save at least one smile?</h2>
+          </div>
+          <p class="copy">
+            It was built with friendship, good intentions, and your favorite color.
+          </p>
+          <div class="answer-grid">
+            <button class="answer yes" type="button" data-next>Yes, it can</button>
+            <button class="answer no" type="button" data-no>Maybe later</button>
+          </div>
+        </section>
+
+        <section class="screen question-screen" data-screen="3">
+          <div class="panel-card straight-panel">
+            <p class="panel-label">Scene 03</p>
+            <h2>Will you accept a tiny birthday mission?</h2>
+          </div>
+          <p class="copy">
+            Keep being brave, kind, funny, curious, and beautifully yourself.
+          </p>
+          <div class="answer-grid">
+            <button class="answer yes" type="button" data-next>Mission accepted</button>
+            <button class="answer no" type="button" data-no>Too difficult</button>
+          </div>
+        </section>
+
+        <section class="screen final-screen" data-screen="4">
+          <p class="eyebrow">Final panel</p>
+          <div class="final-photo" data-photo="assets/photo-01.jpg">
+            <span>Your picture here</span>
+          </div>
+          <h2>You are celebrated today</h2>
+          <p class="copy">
+            Marty-Ann, I hope your birthday feels warm, bright, and full of little moments
+            that remind you how appreciated you are.
+          </p>
+          <div class="reason-sky" aria-label="Birthday wishes">
+            <button class="reason-token token-a" type="button" data-reason="May this year bring you courage for every new step." aria-label="Wish 1">1</button>
+            <button class="reason-token token-b" type="button" data-reason="May your days be lighter, kinder, and full of music." aria-label="Wish 2">2</button>
+            <button class="reason-token token-c" type="button" data-reason="May you always find people who value your heart." aria-label="Wish 3">3</button>
+            <button class="reason-token token-d" type="button" data-reason="May orange always look like sunshine around you." aria-label="Wish 4">4</button>
+            <button class="reason-token token-e" type="button" data-reason="May you remember that you matter, even from far away." aria-label="Wish 5">5</button>
+          </div>
+          <p class="reason-text" id="reasonText">Tap a token to reveal a birthday wish.</p>
+          <div class="memory-strip" aria-label="Future photo placeholders">
+            <button type="button" data-photo="assets/photo-02.jpg"><span>Photo 2</span></button>
+            <button type="button" data-photo="assets/photo-03.jpg"><span>Photo 3</span></button>
+            <button type="button" data-photo="assets/photo-04.jpg"><span>Photo 4</span></button>
+          </div>
+          <button class="secondary-action" type="button" id="galleryButton">Open future gallery</button>
+          <button class="primary-action" type="button" id="restartButton">Play again</button>
+        </section>
+      </section>
+
+      <audio id="song" preload="auto" loop playsinline src="assets/birthday-song.mp3"></audio>
+
+      <dialog class="photo-modal" id="photoModal" aria-label="Photo preview">
+        <button class="modal-close" id="modalClose" type="button" aria-label="Close">x</button>
+        <div class="modal-preview" id="modalPreview">Photo coming soon</div>
+        <p id="modalCaption">Add your image later in the assets folder.</p>
+      </dialog>
+
+      <dialog class="gallery-modal" id="galleryModal" aria-label="Gallery">
+        <div class="gallery-head">
+          <p>Marty-Ann gallery</p>
+          <button class="modal-close inline-close" id="galleryClose" type="button" aria-label="Close">x</button>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </dialog>
+
+      <dialog class="secret-modal" id="secretModal" aria-label="Secret birthday message">
+        <button class="modal-close" id="secretClose" type="button" aria-label="Close">x</button>
+        <div class="secret-card">
+          <span class="secret-badge" aria-hidden="true">M</span>
+          <p class="eyebrow">Hidden panel</p>
+          <h2>One more thing</h2>
+          <p>
+            A friend can be far away and still send a little light. Happy Birthday, Marty-Ann.
+          </p>
+        </div>
+      </dialog>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
