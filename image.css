@@ -19,6 +19,12 @@
   object-fit: cover;
 }
 
+.photo-placeholder img,
+.final-photo img {
+  object-fit: contain;
+  background: rgba(255, 248, 241, 0.9);
+}
+
 .photo-placeholder.has-image,
 .scene-photo.has-image,
 .final-photo.has-image,
@@ -57,12 +63,18 @@
   margin-bottom: 0;
 }
 
+.intro-screen .web-badge,
+.intro-screen .cute-mask {
+  display: none;
+}
+
 .photo-placeholder {
-  right: 22px;
-  bottom: 22px;
-  width: min(66%, 250px);
-  height: min(72%, 270px);
-  transform: rotate(3deg);
+  right: 24px;
+  bottom: 20px;
+  width: min(74%, 282px);
+  height: min(78%, 292px);
+  z-index: 3;
+  transform: rotate(2deg);
 }
 
 .intro-screen .copy {
@@ -73,6 +85,27 @@
 .intro-screen .primary-action {
   min-height: 56px;
   margin-bottom: 2px;
+}
+
+.intro-screen .word-one {
+  top: 34px;
+  left: 18px;
+  z-index: 4;
+  transform: rotate(-7deg);
+}
+
+.intro-screen .word-two {
+  right: 12px;
+  top: 88px;
+  z-index: 4;
+  transform: rotate(8deg);
+}
+
+.intro-screen .word-three {
+  left: 18px;
+  bottom: 38px;
+  z-index: 4;
+  transform: rotate(5deg);
 }
 
 .scene-photo {
@@ -127,8 +160,15 @@
   padding-bottom: 18px;
 }
 
+.final-hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 122px;
+  align-items: center;
+  gap: 12px;
+}
+
 .final-screen h2 {
-  max-width: 9ch;
+  max-width: 8ch;
   font-size: clamp(1.72rem, 8vw, 2.65rem);
 }
 
@@ -138,10 +178,11 @@
 }
 
 .final-photo {
-  width: min(52%, 185px);
-  max-height: 185px;
+  width: 122px;
+  max-height: 122px;
   aspect-ratio: 1 / 1;
-  margin: -2px 0 0;
+  justify-self: end;
+  margin: 0;
 }
 
 .reason-sky {
@@ -165,8 +206,10 @@
   }
 
   .photo-placeholder {
-    width: min(62%, 205px);
-    height: min(68%, 220px);
+    right: 18px;
+    bottom: 18px;
+    width: min(72%, 218px);
+    height: min(72%, 230px);
   }
 
   .cover-main {
@@ -180,6 +223,13 @@
 
   .intro-screen .primary-action {
     min-height: 48px;
+  }
+
+  .intro-screen .word-one,
+  .intro-screen .word-two,
+  .intro-screen .word-three {
+    font-size: 0.82rem;
+    padding: 6px 9px;
   }
 
   .panel-card {
@@ -197,9 +247,14 @@
     padding-bottom: 12px;
   }
 
+  .final-hero-row {
+    grid-template-columns: minmax(0, 1fr) 92px;
+    gap: 10px;
+  }
+
   .final-photo {
-    width: min(38%, 130px);
-    max-height: 130px;
+    width: 92px;
+    max-height: 92px;
   }
 
   .final-screen .copy {
