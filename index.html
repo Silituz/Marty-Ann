@@ -10,6 +10,7 @@
     <meta property="og:description" content="A friendly birthday surprise with comic-book energy and a lot of orange.">
     <title>Happy Birthday, Marty-Ann</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="comic.css">
   </head>
   <body>
     <main class="page-shell">
@@ -17,6 +18,8 @@
         <span class="web-line web-line-a"></span>
         <span class="web-line web-line-b"></span>
         <span class="web-line web-line-c"></span>
+        <span class="web-ring web-ring-a"></span>
+        <span class="web-ring web-ring-b"></span>
         <span class="halftone halftone-a"></span>
         <span class="halftone halftone-b"></span>
       </div>
@@ -38,8 +41,10 @@
         <section class="screen active intro-screen" data-screen="0">
           <div class="hero-comic" role="img" aria-label="Comic-style orange superhero birthday card">
             <span class="burst-word word-one">POW</span>
-            <span class="burst-word word-two">WOW</span>
+            <span class="burst-word word-two">THWIP</span>
+            <span class="burst-word word-three">WEB</span>
             <span class="web-badge"></span>
+            <span class="cute-mask" aria-hidden="true"></span>
             <div class="photo-placeholder">
               <span>Photo coming soon</span>
             </div>
@@ -51,12 +56,14 @@
             No love letter, no drama, just a bright birthday surprise for a wonderful friend.
           </p>
           <button class="primary-action" type="button" data-next>
-            Start the surprise
+            Next: open the surprise
           </button>
         </section>
 
         <section class="screen question-screen" data-screen="1">
           <div class="panel-card tilted-left">
+            <span class="panel-web panel-web-top"></span>
+            <span class="sticker sticker-a">Cute hero mode</span>
             <p class="panel-label">Scene 01</p>
             <h2>Ready to swing into your birthday?</h2>
           </div>
@@ -64,13 +71,15 @@
             Today is officially your orange-powered hero day.
           </p>
           <div class="answer-grid">
-            <button class="answer yes" type="button" data-next>Absolutely</button>
-            <button class="answer no" type="button" data-no>Not yet</button>
+            <button class="answer next" type="button" data-next>Next</button>
+            <button class="answer no" type="button" data-no>No</button>
           </div>
         </section>
 
         <section class="screen question-screen" data-screen="2">
           <div class="panel-card tilted-right">
+            <span class="panel-web panel-web-right"></span>
+            <span class="sticker sticker-b">Friendly power</span>
             <p class="panel-label">Scene 02</p>
             <h2>Can this page save at least one smile?</h2>
           </div>
@@ -78,13 +87,15 @@
             It was built with friendship, good intentions, and your favorite color.
           </p>
           <div class="answer-grid">
-            <button class="answer yes" type="button" data-next>Yes, it can</button>
-            <button class="answer no" type="button" data-no>Maybe later</button>
+            <button class="answer next" type="button" data-next>Next</button>
+            <button class="answer no" type="button" data-no>No</button>
           </div>
         </section>
 
         <section class="screen question-screen" data-screen="3">
           <div class="panel-card straight-panel">
+            <span class="panel-web panel-web-bottom"></span>
+            <span class="sticker sticker-c">Orange sparkle</span>
             <p class="panel-label">Scene 03</p>
             <h2>Will you accept a tiny birthday mission?</h2>
           </div>
@@ -92,8 +103,8 @@
             Keep being brave, kind, funny, curious, and beautifully yourself.
           </p>
           <div class="answer-grid">
-            <button class="answer yes" type="button" data-next>Mission accepted</button>
-            <button class="answer no" type="button" data-no>Too difficult</button>
+            <button class="answer next" type="button" data-next>Next</button>
+            <button class="answer no" type="button" data-no>No</button>
           </div>
         </section>
 
