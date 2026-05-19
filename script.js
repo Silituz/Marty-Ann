@@ -17,12 +17,12 @@ const secretClose = document.querySelector("#secretClose");
 const reasonText = document.querySelector("#reasonText");
 
 const noReplies = [
-  "The hero answer is close",
-  "That button got nervous",
-  "Try the brighter choice",
-  "Almost a yes",
-  "Birthday mission pending",
-  "Okay, one more chance"
+  "No? The web says try Next",
+  "That No got tangled",
+  "Cute hero answer loading",
+  "No is swinging away",
+  "Birthday mission says Next",
+  "Almost a comic-book yes"
 ];
 
 const galleryItems = [
@@ -145,19 +145,19 @@ function sweetenNo(button) {
   button.style.setProperty("--no-x", `${x}px`);
   button.style.setProperty("--no-y", `${y}px`);
   button.style.setProperty("--no-tilt", `${tilt}deg`);
-  createBurst(button, "HEY");
+  createBurst(button, "WEB");
 
   if (noCount < 3) {
-    showToast("The page is gently cheering for a yes.");
+    showToast("The No button got caught in a cute web.");
     return;
   }
 
-  button.textContent = "Fine, mission accepted";
+  button.textContent = "Next";
   button.classList.remove("is-playful");
   button.classList.add("is-glow");
   button.dataset.next = "";
   button.removeAttribute("data-no");
-  showToast("The mission found its yes.");
+  showToast("The web turned No into Next.");
 }
 
 function showReason(button) {
@@ -235,7 +235,7 @@ musicButton.addEventListener("click", (event) => {
 
 restartButton.addEventListener("click", () => {
   document.querySelectorAll(".answer.no, .answer[data-no-count]").forEach((button, index) => {
-    const labels = ["Not yet", "Maybe later", "Too difficult"];
+    const labels = ["No", "No", "No"];
     button.classList.remove("is-playful", "is-glow");
     button.style.removeProperty("--no-x");
     button.style.removeProperty("--no-y");
@@ -243,7 +243,7 @@ restartButton.addEventListener("click", () => {
     button.dataset.no = "";
     delete button.dataset.next;
     delete button.dataset.noCount;
-    button.textContent = labels[index] || "Not yet";
+    button.textContent = labels[index] || "No";
   });
 
   document.querySelectorAll(".reason-token").forEach((button) => button.classList.remove("is-found"));
