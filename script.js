@@ -49,6 +49,7 @@ let galleryBuilt = false;
 let secretClicks = Number(sessionStorage.getItem("martySecretClicks") || "0");
 let secretUnlocked = sessionStorage.getItem("martySecretUnlocked") === "true";
 let secretShownThisVisit = false;
+let secretReplayClicks = 0;
 const imageCache = new Map();
 
 function imageCandidates(numberOrPath) {
@@ -181,7 +182,9 @@ function flashFrameFight() {
 
 function countSecretMoment() {
   if (secretUnlocked) {
-    if (!secretShownThisVisit && secretModal && typeof secretModal.showModal === "function") {
+    secretReplayClicks += 1;
+
+    if (!secretShownThisVisit && secretReplayClicks >= 4 && secretModal && typeof secretModal.showModal === "function") {
       secretShownThisVisit = true;
       secretModal.showModal();
     }
@@ -320,7 +323,6 @@ document.addEventListener("click", (event) => {
   }
 
   if (photoButton) {
-    countSecretMoment();
     openPhoto(photoButton.dataset.photo || photoButton.dataset.photoKey);
     return;
   }
