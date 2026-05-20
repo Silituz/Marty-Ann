@@ -52,6 +52,10 @@
   padding: 0;
 }
 
+.is-photo-clickable {
+  cursor: zoom-in;
+}
+
 .intro-screen {
   align-content: start;
   grid-template-rows: auto auto auto auto;
@@ -140,7 +144,7 @@
   width: 42%;
   max-width: 150px;
   aspect-ratio: 4 / 5;
-  z-index: 2;
+  z-index: 4;
   display: grid;
   place-items: center;
   border: 2px solid rgba(255, 255, 255, 0.46);
@@ -153,6 +157,24 @@
   font-size: 0.78rem;
   font-weight: 850;
   text-align: center;
+  cursor: zoom-in;
+}
+
+.scene-photo img {
+  pointer-events: none;
+}
+
+.question-screen .panel-card {
+  --scene-photo-space: min(46%, 166px);
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.question-screen .panel-card h2 {
+  max-width: calc(100% - 8px);
+  font-size: clamp(1.36rem, 6.8vw, 2.25rem);
+  line-height: 1.06;
+  overflow-wrap: normal;
 }
 
 .scene-photo-left {
@@ -171,12 +193,15 @@
 
 .scene-photo-left ~ .panel-label,
 .scene-photo-left ~ h2 {
-  padding-left: min(48%, 165px);
+  max-width: calc(100% - var(--scene-photo-space));
+  margin-left: var(--scene-photo-space);
+  padding-left: 0;
 }
 
 .scene-photo-right ~ .panel-label,
 .scene-photo-right ~ h2 {
-  max-width: 54%;
+  max-width: calc(100% - var(--scene-photo-space));
+  margin-right: var(--scene-photo-space);
 }
 
 .final-screen {
@@ -268,6 +293,15 @@
     top: 48px;
     width: 34%;
     max-width: 112px;
+  }
+
+  .question-screen .panel-card {
+    --scene-photo-space: min(38%, 124px);
+  }
+
+  .question-screen .panel-card h2 {
+    font-size: clamp(1.18rem, 6.2vw, 1.82rem);
+    line-height: 1.08;
   }
 
   .final-screen {
@@ -427,6 +461,16 @@
   content: none;
 }
 
+.photo-modal,
+.gallery-modal,
+.secret-modal {
+  position: relative;
+}
+
+.modal-close {
+  z-index: 10;
+}
+
 .wish-complete-modal {
   border-color: rgba(255, 122, 24, 0.58);
   background:
@@ -460,12 +504,12 @@
 .wish-complete-card::after {
   top: 16px;
   right: 18px;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background-image: radial-gradient(circle, rgba(255, 122, 24, 0.46) 2px, transparent 2px);
-  background-size: 10px 10px;
-  opacity: 0.5;
+  width: 86px;
+  height: 22px;
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.68), rgba(255, 122, 24, 0.36));
+  clip-path: polygon(0 0, 74% 0, 64% 44%, 100% 44%, 42% 100%, 52% 56%, 0 56%);
+  opacity: 0.64;
+  transform: rotate(11deg);
 }
 
 .wish-heart {
@@ -498,6 +542,58 @@
   text-shadow:
     2px 2px 0 #100918,
     4px 4px 0 var(--red);
+}
+
+.wish-complete-modal.ending-good {
+  border-color: rgba(255, 209, 102, 0.72);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 209, 102, 0.38), transparent 13rem),
+    radial-gradient(circle at 18% 82%, rgba(88, 231, 255, 0.18), transparent 10rem),
+    linear-gradient(145deg, rgba(9, 12, 25, 0.98), rgba(44, 14, 18, 0.98));
+}
+
+.wish-complete-modal.ending-normal {
+  border-color: rgba(255, 122, 24, 0.48);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 122, 24, 0.24), transparent 12rem),
+    linear-gradient(145deg, rgba(10, 15, 31, 0.98), rgba(24, 35, 68, 0.96));
+}
+
+.wish-complete-modal.ending-villain {
+  border-color: rgba(200, 25, 46, 0.62);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(200, 25, 46, 0.28), transparent 12rem),
+    radial-gradient(circle at 18% 86%, rgba(255, 122, 24, 0.18), transparent 10rem),
+    linear-gradient(145deg, rgba(5, 7, 18, 0.99), rgba(36, 9, 28, 0.98));
+}
+
+.wish-complete-modal.ending-normal .wish-heart {
+  color: #ffb24a;
+  text-shadow:
+    0 0 12px rgba(255, 122, 24, 0.72),
+    3px 3px 0 #100918;
+}
+
+.wish-complete-modal.ending-villain .wish-heart {
+  color: var(--orange);
+  text-shadow:
+    0 0 10px rgba(255, 122, 24, 0.78),
+    3px 3px 0 #100918,
+    -3px 3px 0 var(--red);
+}
+
+.wish-complete-modal.ending-normal .wish-complete-card h2 {
+  color: #ffd166;
+  text-shadow:
+    2px 2px 0 #100918,
+    3px 3px 0 var(--blue);
+}
+
+.wish-complete-modal.ending-villain .wish-complete-card h2 {
+  color: #ffb24a;
+  text-shadow:
+    2px 2px 0 #100918,
+    4px 4px 0 #5b1020;
 }
 
 @keyframes heartBeat {
