@@ -20,14 +20,62 @@ const reasonText = document.querySelector("#reasonText");
 const reasonButtons = [...document.querySelectorAll(".reason-token")];
 const frameHeroStage = document.querySelector(".frame-hero-stage");
 
-const noReplies = [
-  "No? The web says try Next",
-  "That No got tangled",
-  "Cute hero answer loading",
-  "No is swinging away",
-  "Birthday mission says Next",
-  "Almost a comic-book yes"
-];
+const sceneChoices = {
+  1: {
+    yes: "Long live the Heroes",
+    no: "Villain Button",
+    replies: ["Are you sure?", "But you have a good heart.", "Okay, you win, hero."],
+    burst: "HERO"
+  },
+  2: {
+    yes: "Follow the Signal",
+    no: "Cut the Signal",
+    replies: ["The signal dodged that.", "It says: too sparkly to ignore.", "Signal restored. Swinging on."],
+    burst: "PING"
+  },
+  3: {
+    yes: "Charge Orange Power",
+    no: "Low Battery",
+    replies: ["Orange power refuses to quit.", "Tiny hero found a charger.", "Fully charged. Moving on."],
+    burst: "ZAP"
+  },
+  4: {
+    yes: "Keep the Spark",
+    no: "Dim the Spark",
+    replies: ["The spark blinked dramatically.", "It is too cute to dim.", "Spark protected. Next panel."],
+    burst: "GLOW"
+  },
+  5: {
+    yes: "Patrol With Them",
+    no: "Skip Patrol",
+    replies: ["Patrol says: request denied.", "A tiny shield blocks the skip.", "Patrol complete. Forward!"],
+    burst: "BAM"
+  },
+  6: {
+    yes: "Follow the Web Route",
+    no: "Wrong Turn",
+    replies: ["The web pulls you back.", "No shortcuts in hero traffic.", "Route corrected. Swinging on."],
+    burst: "WEB"
+  },
+  7: {
+    yes: "Rescue the Smile",
+    no: "Not Today",
+    replies: ["The smile filed an appeal.", "Appeal accepted instantly.", "Smile rescue approved."],
+    burst: "YES"
+  },
+  8: {
+    yes: "Final Swing",
+    no: "Stay Here",
+    replies: ["The web line is already attached.", "Tiny heroes are counting down.", "Final swing launched."],
+    burst: "SWING"
+  },
+  9: {
+    yes: "Deliver the Surprise",
+    no: "Hold the Package",
+    replies: ["Package is wiggling.", "It says: open birthday mode.", "Delivered with comic drama."],
+    burst: "POW"
+  }
+};
 
 const galleryItems = Array.from({ length: 22 }, (_, index) => index + 1);
 const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
@@ -127,6 +175,24 @@ async function hydratePhotoTarget(target) {
 function hydratePhotos() {
   document.querySelectorAll("[data-photo-key]").forEach((target) => {
     hydratePhotoTarget(target);
+  });
+}
+
+function applySceneChoiceLabels() {
+  document.querySelectorAll(".question-screen").forEach((screen) => {
+    const screenNumber = Number(screen.dataset.screen);
+    const sceneChoice = sceneChoices[screenNumber];
+    const yesButton = screen.querySelector("[data-next]");
+    const noButton = screen.querySelector("[data-no]");
+
+    if (yesButton && sceneChoice) {
+      yesButton.textContent = sceneChoice.yes;
+    }
+
+    if (noButton && sceneChoice) {
+      noButton.textContent = sceneChoice.no;
+      noButton.disabled = false;
+    }
   });
 }
 
@@ -233,7 +299,7 @@ async function toggleMusic() {
   try {
     await song.play();
     musicButton.classList.add("playing");
-    showToast("Music is ready. Replace the placeholder file when you want.");
+    showToast("Music play.");
   } catch {
     musicButton.classList.remove("playing");
     showToast("Add assets/birthday-song.mp3 later, then tap music again.");
@@ -242,30 +308,38 @@ async function toggleMusic() {
 
 function sweetenNo(button) {
   const noCount = Number(button.dataset.noCount || "0") + 1;
+  const screen = button.closest(".screen");
+  const screenNumber = Number(screen?.dataset.screen || currentScreen);
+  const sceneChoice = sceneChoices[screenNumber] || {
+    yes: "Next",
+    no: "No",
+    replies: ["Are you sure?", "The web says try again.", "Okay, moving on."],
+    burst: "WEB"
+  };
+  const replyIndex = Math.min(noCount - 1, sceneChoice.replies.length - 1);
   const x = Math.round(Math.random() * 44 - 22);
   const y = Math.round(Math.random() * 18 - 9);
   const tilt = Math.round(Math.random() * 10 - 5);
 
   button.dataset.noCount = String(noCount);
-  button.textContent = noReplies[Math.floor(Math.random() * noReplies.length)];
+  button.textContent = sceneChoice.replies[replyIndex];
   button.classList.add("is-playful");
   button.style.setProperty("--no-x", `${x}px`);
   button.style.setProperty("--no-y", `${y}px`);
   button.style.setProperty("--no-tilt", `${tilt}deg`);
-  createBurst(button, "WEB");
+  createBurst(button, sceneChoice.burst);
   flashFrameFight();
 
-  if (noCount < 3) {
-    showToast("The No button got caught in a cute web.");
+  if (noCount < sceneChoice.replies.length) {
+    showToast(sceneChoice.replies[replyIndex]);
     return;
   }
 
-  button.textContent = "Next";
-  button.classList.remove("is-playful", "no");
-  button.classList.add("is-glow", "next");
-  button.dataset.next = "";
-  button.removeAttribute("data-no");
-  showToast("The web turned No into Next.");
+  button.classList.remove("is-playful");
+  button.classList.add("is-glow");
+  button.disabled = true;
+  showToast(sceneChoice.replies[replyIndex]);
+  setTimeout(() => setScreen(currentScreen + 1), 780);
 }
 
 function showReason(button) {
@@ -361,17 +435,16 @@ musicButton.addEventListener("click", (event) => {
 });
 
 restartButton.addEventListener("click", () => {
-  document.querySelectorAll(".answer.no, .answer[data-no-count]").forEach((button, index) => {
-    const labels = ["No", "No", "No"];
+  applySceneChoiceLabels();
+
+  document.querySelectorAll(".answer.no, .answer[data-no-count]").forEach((button) => {
     button.classList.remove("is-playful", "is-glow", "next");
     button.classList.add("no");
     button.style.removeProperty("--no-x");
     button.style.removeProperty("--no-y");
     button.style.removeProperty("--no-tilt");
     button.dataset.no = "";
-    delete button.dataset.next;
     delete button.dataset.noCount;
-    button.textContent = labels[index] || "No";
   });
 
   reasonButtons.forEach((button) => button.classList.remove("is-found"));
@@ -438,4 +511,5 @@ if (wishCompleteModal) {
 }
 
 setScreen(0);
+applySceneChoiceLabels();
 hydratePhotos();
