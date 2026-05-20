@@ -196,6 +196,30 @@ function applySceneChoiceLabels() {
   });
 }
 
+function setupWishCompletePanel() {
+  if (!wishCompleteModal) {
+    return;
+  }
+
+  wishCompleteModal.setAttribute("aria-label", "Secret Wish Panel");
+  wishCompleteModal.classList.add("wish-complete-modal");
+
+  const card = wishCompleteModal.querySelector(".secret-card");
+
+  if (card) {
+    card.classList.add("wish-complete-card");
+    card.innerHTML = `
+      <span class="wish-heart" aria-hidden="true">&hearts;</span>
+      <p class="eyebrow">Secret Wish Panel</p>
+      <h2>A hero-level reminder</h2>
+      <p>
+        But the most important thing is something you must never forget:
+        that you are someone&rsquo;s favorite person &#129392;
+      </p>
+    `;
+  }
+}
+
 function setScreen(nextScreen) {
   currentScreen = Math.max(0, Math.min(nextScreen, screens.length - 1));
 
@@ -362,6 +386,14 @@ function showReason(button) {
   }
 }
 
+function resetWishes() {
+  reasonButtons.forEach((button) => button.classList.remove("is-found"));
+
+  if (reasonText) {
+    reasonText.textContent = "Tap a word to reveal a birthday wish.";
+  }
+}
+
 async function openPhoto(photoReference) {
   const src = await resolveImage(photoReference);
 
@@ -447,11 +479,7 @@ restartButton.addEventListener("click", () => {
     delete button.dataset.noCount;
   });
 
-  reasonButtons.forEach((button) => button.classList.remove("is-found"));
-
-  if (reasonText) {
-    reasonText.textContent = "Tap a word to reveal a birthday wish.";
-  }
+  resetWishes();
 
   if (wishCompleteModal && wishCompleteModal.open) {
     wishCompleteModal.close();
@@ -503,6 +531,8 @@ if (secretModal) {
 }
 
 if (wishCompleteModal) {
+  wishCompleteModal.addEventListener("close", resetWishes);
+
   wishCompleteModal.addEventListener("click", (event) => {
     if (event.target === wishCompleteModal) {
       wishCompleteModal.close();
@@ -512,4 +542,5 @@ if (wishCompleteModal) {
 
 setScreen(0);
 applySceneChoiceLabels();
+setupWishCompletePanel();
 hydratePhotos();
