@@ -77,6 +77,24 @@ const sceneChoices = {
   }
 };
 
+const storySceneNumbers = Object.keys(sceneChoices).map(Number);
+const positiveSceneChoices = new Set();
+const negativeSceneChoices = new Set();
+const wishEndings = {
+  good: {
+    title: "Good Ending: Hero Heart",
+    text: "But the most important thing is something you must never forget: that you are someone&rsquo;s favorite person &#129392;"
+  },
+  normal: {
+    title: "Normal Ending: Web Detour",
+    text: "One villain button was enough to change the route, but the mission still arrived safely: you are appreciated, celebrated, and very much allowed to smile today."
+  },
+  villain: {
+    title: "Villain Ending: Cute Chaos",
+    text: "You chose every suspicious button. Dramatic. Still, the dark side brought orange sparks, birthday cake energy, and one tiny truth: you are appreciated."
+  }
+};
+
 const galleryItems = Array.from({ length: 22 }, (_, index) => index + 1);
 const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
 const imageNamePatterns = [
@@ -166,6 +184,13 @@ async function hydratePhotoTarget(target) {
   const label = target.getAttribute("aria-label") || target.textContent.trim() || "Birthday photo";
   const src = await resolveImage(key);
 
+  target.classList.add("is-photo-clickable");
+
+  if (target.tagName !== "BUTTON") {
+    target.setAttribute("role", "button");
+    target.tabIndex = 0;
+  }
+
   if (src) {
     target.dataset.photo = src;
     placeImage(target, src, label);
@@ -203,20 +228,73 @@ function setupWishCompletePanel() {
 
   wishCompleteModal.setAttribute("aria-label", "Secret Wish Panel");
   wishCompleteModal.classList.add("wish-complete-modal");
+  renderWishCompletePanel();
+}
+
+function markSceneChoice(screenNumber, choiceType) {
+  if (!sceneChoices[screenNumber]) {
+    return;
+  }
+
+  if (choiceType === "negative") {
+    negativeSceneChoices.add(screenNumber);
+    return;
+  }
+
+  positiveSceneChoices.add(screenNumber);
+}
+
+function resetSceneChoices() {
+  positiveSceneChoices.clear();
+  negativeSceneChoices.clear();
+}
+
+function getWishEndingType() {
+  const onlyVillainPath = storySceneNumbers.every((screenNumber) => negativeSceneChoices.has(screenNumber))
+    && positiveSceneChoices.size === 0;
+
+  if (onlyVillainPath) {
+    return "villain";
+  }
+
+  if (negativeSceneChoices.size > 0) {
+    return "normal";
+  }
+
+  return "good";
+}
+
+function renderWishCompletePanel() {
+  if (!wishCompleteModal) {
+    return;
+  }
 
   const card = wishCompleteModal.querySelector(".secret-card");
+  const endingType = getWishEndingType();
+  const ending = wishEndings[endingType];
+
+  wishCompleteModal.classList.remove("ending-good", "ending-normal", "ending-villain");
+  wishCompleteModal.classList.add(`ending-${endingType}`);
 
   if (card) {
     card.classList.add("wish-complete-card");
     card.innerHTML = `
       <span class="wish-heart" aria-hidden="true">&hearts;</span>
       <p class="eyebrow">Secret Wish Panel</p>
-      <h2>A hero-level reminder</h2>
-      <p>
-        But the most important thing is something you must never forget:
-        that you are someone&rsquo;s favorite person &#129392;
-      </p>
+      <h2>${ending.title}</h2>
+      <p>${ending.text}</p>
     `;
+  }
+}
+
+function openWishCompletePanel() {
+  if (
+    wishCompleteModal
+    && typeof wishCompleteModal.showModal === "function"
+    && !wishCompleteModal.open
+  ) {
+    renderWishCompletePanel();
+    wishCompleteModal.showModal();
   }
 }
 
@@ -345,6 +423,7 @@ function sweetenNo(button) {
   const y = Math.round(Math.random() * 18 - 9);
   const tilt = Math.round(Math.random() * 10 - 5);
 
+  markSceneChoice(screenNumber, "negative");
   button.dataset.noCount = String(noCount);
   button.textContent = sceneChoice.replies[replyIndex];
   button.classList.add("is-playful");
@@ -378,11 +457,8 @@ function showReason(button) {
   if (
     reasonButtons.length > 0
     && reasonButtons.every((reasonButton) => reasonButton.classList.contains("is-found"))
-    && wishCompleteModal
-    && typeof wishCompleteModal.showModal === "function"
-    && !wishCompleteModal.open
   ) {
-    wishCompleteModal.showModal();
+    openWishCompletePanel();
   }
 }
 
@@ -436,7 +512,6 @@ document.addEventListener("click", (event) => {
   const reasonButton = event.target.closest("[data-reason]");
 
   if (reasonButton) {
-    countSecretMoment();
     showReason(reasonButton);
     return;
   }
@@ -447,22 +522,38 @@ document.addEventListener("click", (event) => {
   }
 
   if (noButton) {
-    countSecretMoment();
     sweetenNo(noButton);
     return;
   }
 
   if (nextButton) {
-    countSecretMoment();
+    const screen = nextButton.closest(".screen");
+    const screenNumber = Number(screen?.dataset.screen || currentScreen);
+
+    markSceneChoice(screenNumber, "positive");
     createBurst(nextButton);
     flashFrameFight();
     setScreen(currentScreen + 1);
   }
 });
 
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") {
+    return;
+  }
+
+  const photoButton = event.target.closest("[data-photo], [data-photo-key]");
+
+  if (!photoButton) {
+    return;
+  }
+
+  event.preventDefault();
+  openPhoto(photoButton.dataset.photo || photoButton.dataset.photoKey);
+});
+
 musicButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  countSecretMoment();
   toggleMusic();
 });
 
@@ -480,6 +571,7 @@ restartButton.addEventListener("click", () => {
   });
 
   resetWishes();
+  resetSceneChoices();
 
   if (wishCompleteModal && wishCompleteModal.open) {
     wishCompleteModal.close();
@@ -492,7 +584,6 @@ modalClose.addEventListener("click", () => modal.close());
 
 galleryButton.addEventListener("click", (event) => {
   event.stopPropagation();
-  countSecretMoment();
   buildGallery();
 
   if (typeof galleryModal.showModal === "function") {
@@ -507,7 +598,10 @@ if (secretClose) {
 }
 
 if (wishCompleteClose) {
-  wishCompleteClose.addEventListener("click", () => wishCompleteModal.close());
+  wishCompleteClose.addEventListener("click", (event) => {
+    event.stopPropagation();
+    wishCompleteModal.close();
+  });
 }
 
 modal.addEventListener("click", (event) => {
