@@ -20,6 +20,136 @@ const reasonText = document.querySelector("#reasonText");
 const reasonButtons = [...document.querySelectorAll(".reason-token")];
 const frameHeroStage = document.querySelector(".frame-hero-stage");
 
+function injectDynamicStyles() {
+  if (document.querySelector("#martyDynamicStyles")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = "martyDynamicStyles";
+  style.textContent = `
+    .music-note-button span {
+      transform: translateY(-1px);
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .ending-modal {
+      border-color: rgba(255, 122, 24, 0.58);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 122, 24, 0.3), transparent 13rem),
+        linear-gradient(145deg, rgba(9, 12, 25, 0.98), rgba(38, 9, 17, 0.98));
+    }
+
+    .ending-card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 10px 10px;
+    }
+
+    .ending-card::before,
+    .ending-card::after {
+      position: absolute;
+      content: "";
+      pointer-events: none;
+    }
+
+    .ending-card::before {
+      inset: 12px;
+      border: 1px solid rgba(255, 248, 241, 0.16);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, transparent 49%, rgba(255, 248, 241, 0.1) 50%, transparent 51%),
+        linear-gradient(0deg, transparent 49%, rgba(255, 248, 241, 0.1) 50%, transparent 51%);
+    }
+
+    .ending-card::after {
+      top: 16px;
+      right: 18px;
+      width: 86px;
+      height: 22px;
+      background: linear-gradient(135deg, rgba(255, 209, 102, 0.64), rgba(255, 122, 24, 0.34));
+      clip-path: polygon(0 0, 74% 0, 64% 44%, 100% 44%, 42% 100%, 52% 56%, 0 56%);
+      opacity: 0.62;
+      transform: rotate(11deg);
+    }
+
+    .ending-badge {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      width: 80px;
+      height: 76px;
+      place-items: center;
+      justify-self: center;
+      color: #ffef9a;
+      text-shadow: 0 0 16px rgba(255, 209, 102, 0.86), 3px 3px 0 #100918;
+      font-size: 3.4rem;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .ending-card .eyebrow,
+    .ending-card h2,
+    .ending-card p {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ending-card h2 {
+      color: #ffef9a;
+      text-shadow: 2px 2px 0 #100918, 4px 4px 0 var(--red);
+    }
+
+    .ending-modal.ending-good {
+      border-color: rgba(255, 209, 102, 0.72);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 209, 102, 0.38), transparent 13rem),
+        radial-gradient(circle at 18% 82%, rgba(88, 231, 255, 0.18), transparent 10rem),
+        linear-gradient(145deg, rgba(9, 12, 25, 0.98), rgba(44, 14, 18, 0.98));
+    }
+
+    .ending-modal.ending-normal {
+      border-color: rgba(255, 122, 24, 0.48);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 122, 24, 0.24), transparent 12rem),
+        linear-gradient(145deg, rgba(10, 15, 31, 0.98), rgba(24, 35, 68, 0.96));
+    }
+
+    .ending-modal.ending-villain {
+      border-color: rgba(200, 25, 46, 0.62);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(200, 25, 46, 0.28), transparent 12rem),
+        radial-gradient(circle at 18% 86%, rgba(255, 122, 24, 0.18), transparent 10rem),
+        linear-gradient(145deg, rgba(5, 7, 18, 0.99), rgba(36, 9, 28, 0.98));
+    }
+
+    .ending-modal.ending-normal .ending-badge {
+      color: #ffd166;
+      text-shadow: 0 0 12px rgba(255, 122, 24, 0.72), 3px 3px 0 #100918;
+    }
+
+    .ending-modal.ending-villain .ending-badge {
+      color: var(--orange);
+      text-shadow: 0 0 10px rgba(255, 122, 24, 0.78), 3px 3px 0 #100918, -3px 3px 0 var(--red);
+    }
+
+    .ending-modal.ending-normal .ending-card h2 {
+      color: #ffd166;
+      text-shadow: 2px 2px 0 #100918, 3px 3px 0 var(--blue);
+    }
+
+    .ending-modal.ending-villain .ending-card h2 {
+      color: #ffb24a;
+      text-shadow: 2px 2px 0 #100918, 4px 4px 0 #5b1020;
+    }
+  `;
+  document.head.append(style);
+}
+
+injectDynamicStyles();
+
 if (musicButton) {
   musicButton.classList.add("music-note-button");
   const musicIcon = musicButton.querySelector("span");
@@ -89,18 +219,18 @@ const sceneChoices = {
 const storySceneNumbers = Object.keys(sceneChoices).map(Number);
 const positiveSceneChoices = new Set();
 const negativeSceneChoices = new Set();
-const wishEndings = {
+const endingPanels = {
   good: {
-    title: "Good Ending: Hero Heart",
-    text: "But the most important thing is something you must never forget: that you are someone&rsquo;s favorite person &#129392;"
+    title: "Good Ending: Golden Hero Moment",
+    text: "You carried the birthday mission with a bright hero heart. May Marty-Ann feel warmly celebrated today, gently appreciated from far away, and surrounded by little reasons to smile."
   },
   normal: {
-    title: "Normal Ending: Web Detour",
-    text: "One villain button was enough to change the route, but the mission still arrived safely: you are appreciated, celebrated, and very much allowed to smile today."
+    title: "Normal Ending: Sweet Web Detour",
+    text: "A tiny bit of mischief joined the route, but that only made the story cuter. The birthday wish still arrives safely, wrapped in kindness, orange sparks, and a soft smile."
   },
   villain: {
-    title: "Villain Ending: Cute Chaos",
-    text: "You chose every suspicious button. Dramatic. Still, the dark side brought orange sparks, birthday cake energy, and one tiny truth: you are appreciated."
+    title: "Villain Ending: Mischief With Heart",
+    text: "You pressed every suspicious button like a very stylish birthday villain. Luckily, even this route has a soft heart: the surprise still arrives with charm, laughter, and a very kind wish."
   }
 };
 
@@ -128,6 +258,10 @@ let secretClicks = Number(sessionStorage.getItem("martySecretClicks") || "0");
 let secretUnlocked = sessionStorage.getItem("martySecretUnlocked") === "true";
 let secretShownThisVisit = false;
 let secretReplayClicks = 0;
+let endingShownThisRun = false;
+let endingModal;
+let endingClose;
+let endingCard;
 const imageCache = new Map();
 
 function imageCandidates(numberOrPath) {
@@ -240,6 +374,35 @@ function setupWishCompletePanel() {
   renderWishCompletePanel();
 }
 
+function setupEndingPanel() {
+  endingModal = document.createElement("dialog");
+  endingModal.className = "secret-modal ending-modal";
+  endingModal.setAttribute("aria-label", "Birthday ending panel");
+  endingModal.innerHTML = `
+    <button class="modal-close" id="endingClose" type="button" aria-label="Close">x</button>
+    <div class="secret-card ending-card">
+      <span class="ending-badge" aria-hidden="true">★</span>
+      <p class="eyebrow">Birthday Ending</p>
+      <h2></h2>
+      <p></p>
+    </div>
+  `;
+  document.body.append(endingModal);
+  endingClose = endingModal.querySelector("#endingClose");
+  endingCard = endingModal.querySelector(".ending-card");
+
+  endingClose.addEventListener("click", (event) => {
+    event.stopPropagation();
+    endingModal.close();
+  });
+
+  endingModal.addEventListener("click", (event) => {
+    if (event.target === endingModal) {
+      endingModal.close();
+    }
+  });
+}
+
 function markSceneChoice(screenNumber, choiceType) {
   if (!sceneChoices[screenNumber]) {
     return;
@@ -258,7 +421,7 @@ function resetSceneChoices() {
   negativeSceneChoices.clear();
 }
 
-function getWishEndingType() {
+function getEndingType() {
   const touchedEveryVillainButton = storySceneNumbers.every((screenNumber) => (
     negativeSceneChoices.has(screenNumber)
   ));
@@ -280,21 +443,49 @@ function renderWishCompletePanel() {
   }
 
   const card = wishCompleteModal.querySelector(".secret-card");
-  const endingType = getWishEndingType();
-  const ending = wishEndings[endingType];
-
   wishCompleteModal.classList.remove("ending-good", "ending-normal", "ending-villain");
-  wishCompleteModal.classList.add(`ending-${endingType}`);
 
   if (card) {
     card.classList.add("wish-complete-card");
     card.innerHTML = `
       <span class="wish-heart" aria-hidden="true">&hearts;</span>
       <p class="eyebrow">Secret Wish Panel</p>
-      <h2>${ending.title}</h2>
-      <p>${ending.text}</p>
+      <h2>A hero-level reminder</h2>
+      <p>
+        But the most important thing is something you must never forget:
+        that you are someone&rsquo;s favorite person &#129392;
+      </p>
     `;
   }
+}
+
+function renderEndingPanel() {
+  if (!endingModal || !endingCard) {
+    return;
+  }
+
+  const endingType = getEndingType();
+  const ending = endingPanels[endingType];
+
+  endingModal.classList.remove("ending-good", "ending-normal", "ending-villain");
+  endingModal.classList.add(`ending-${endingType}`);
+  endingCard.querySelector("h2").textContent = ending.title;
+  endingCard.querySelector("p:last-child").textContent = ending.text;
+}
+
+function openEndingPanel() {
+  if (
+    !endingModal
+    || endingShownThisRun
+    || typeof endingModal.showModal !== "function"
+    || endingModal.open
+  ) {
+    return;
+  }
+
+  endingShownThisRun = true;
+  renderEndingPanel();
+  endingModal.showModal();
 }
 
 function openWishCompletePanel() {
@@ -318,6 +509,10 @@ function setScreen(nextScreen) {
   dots.forEach((dot, index) => {
     dot.classList.toggle("active", index === Math.min(currentScreen, dots.length - 1));
   });
+
+  if (currentScreen === screens.length - 1) {
+    setTimeout(openEndingPanel, 380);
+  }
 }
 
 function showToast(message) {
@@ -582,9 +777,14 @@ restartButton.addEventListener("click", () => {
 
   resetWishes();
   resetSceneChoices();
+  endingShownThisRun = false;
 
   if (wishCompleteModal && wishCompleteModal.open) {
     wishCompleteModal.close();
+  }
+
+  if (endingModal && endingModal.open) {
+    endingModal.close();
   }
 
   setScreen(0);
@@ -647,4 +847,5 @@ if (wishCompleteModal) {
 setScreen(0);
 applySceneChoiceLabels();
 setupWishCompletePanel();
+setupEndingPanel();
 hydratePhotos();
