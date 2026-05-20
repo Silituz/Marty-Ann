@@ -20,6 +20,15 @@ const reasonText = document.querySelector("#reasonText");
 const reasonButtons = [...document.querySelectorAll(".reason-token")];
 const frameHeroStage = document.querySelector(".frame-hero-stage");
 
+if (musicButton) {
+  musicButton.classList.add("music-note-button");
+  const musicIcon = musicButton.querySelector("span");
+
+  if (musicIcon) {
+    musicIcon.textContent = "♫";
+  }
+}
+
 const sceneChoices = {
   1: {
     yes: "Long live the Heroes",
@@ -250,10 +259,11 @@ function resetSceneChoices() {
 }
 
 function getWishEndingType() {
-  const onlyVillainPath = storySceneNumbers.every((screenNumber) => negativeSceneChoices.has(screenNumber))
-    && positiveSceneChoices.size === 0;
+  const touchedEveryVillainButton = storySceneNumbers.every((screenNumber) => (
+    negativeSceneChoices.has(screenNumber)
+  ));
 
-  if (onlyVillainPath) {
+  if (touchedEveryVillainButton) {
     return "villain";
   }
 
