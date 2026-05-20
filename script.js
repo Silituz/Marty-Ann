@@ -14,7 +14,10 @@ const galleryGrid = document.querySelector("#galleryGrid");
 const galleryClose = document.querySelector("#galleryClose");
 const secretModal = document.querySelector("#secretModal");
 const secretClose = document.querySelector("#secretClose");
+const wishCompleteModal = document.querySelector("#wishCompleteModal");
+const wishCompleteClose = document.querySelector("#wishCompleteClose");
 const reasonText = document.querySelector("#reasonText");
+const reasonButtons = [...document.querySelectorAll(".reason-token")];
 const frameHeroStage = document.querySelector(".frame-hero-stage");
 
 const noReplies = [
@@ -273,6 +276,16 @@ function showReason(button) {
   reasonText.textContent = button.dataset.reason;
   button.classList.add("is-found");
   createBurst(button, "WISH");
+
+  if (
+    reasonButtons.length > 0
+    && reasonButtons.every((reasonButton) => reasonButton.classList.contains("is-found"))
+    && wishCompleteModal
+    && typeof wishCompleteModal.showModal === "function"
+    && !wishCompleteModal.open
+  ) {
+    wishCompleteModal.showModal();
+  }
 }
 
 async function openPhoto(photoReference) {
@@ -361,10 +374,14 @@ restartButton.addEventListener("click", () => {
     button.textContent = labels[index] || "No";
   });
 
-  document.querySelectorAll(".reason-token").forEach((button) => button.classList.remove("is-found"));
+  reasonButtons.forEach((button) => button.classList.remove("is-found"));
 
   if (reasonText) {
     reasonText.textContent = "Tap a word to reveal a birthday wish.";
+  }
+
+  if (wishCompleteModal && wishCompleteModal.open) {
+    wishCompleteModal.close();
   }
 
   setScreen(0);
@@ -388,6 +405,10 @@ if (secretClose) {
   secretClose.addEventListener("click", () => secretModal.close());
 }
 
+if (wishCompleteClose) {
+  wishCompleteClose.addEventListener("click", () => wishCompleteModal.close());
+}
+
 modal.addEventListener("click", (event) => {
   if (event.target === modal) {
     modal.close();
@@ -404,6 +425,14 @@ if (secretModal) {
   secretModal.addEventListener("click", (event) => {
     if (event.target === secretModal) {
       secretModal.close();
+    }
+  });
+}
+
+if (wishCompleteModal) {
+  wishCompleteModal.addEventListener("click", (event) => {
+    if (event.target === wishCompleteModal) {
+      wishCompleteModal.close();
     }
   });
 }
