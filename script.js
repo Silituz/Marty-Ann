@@ -26,7 +26,7 @@ const noReplies = [
   "Almost a comic-book yes"
 ];
 
-const galleryItems = Array.from({ length: 30 }, (_, index) => index + 1);
+const galleryItems = Array.from({ length: 22 }, (_, index) => index + 1);
 const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
 const imageNamePatterns = [
   (number) => `photo-${String(number).padStart(2, "0")}`,
