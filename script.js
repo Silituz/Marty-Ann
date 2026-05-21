@@ -7,6 +7,21 @@
     "separatedShieldRun"
   ];
 
+  const heroStageMarkup = `
+    <span class="frame-web-line web-shot-one"></span>
+    <span class="frame-web-line web-shot-two"></span>
+    <span class="impact-puff puff-one">BAM</span>
+    <span class="impact-puff puff-two">ZAP</span>
+    <span class="frame-hero hero-web"><span></span></span>
+    <span class="frame-hero hero-mystic"><span></span></span>
+    <span class="frame-hero hero-red"><span></span></span>
+    <span class="frame-hero hero-shadow"><span></span></span>
+    <span class="frame-hero hero-metal"><span></span></span>
+    <span class="frame-hero hero-green"><span></span></span>
+    <span class="frame-hero hero-shield"><span></span></span>
+    <span class="frame-hero hero-hammer"><span></span></span>
+  `;
+
   const removeHeroExperimentStyles = () => {
     document.querySelectorAll("style").forEach((style) => {
       if (EXPERIMENT_STYLE_MARKERS.some((marker) => style.textContent.includes(marker))) {
@@ -15,21 +30,34 @@
     });
   };
 
-  const keepOriginalHeroes = () => {
+  const restoreChaosHeroes = () => {
     removeHeroExperimentStyles();
-    requestAnimationFrame(removeHeroExperimentStyles);
-    setTimeout(removeHeroExperimentStyles, 50);
-    setTimeout(removeHeroExperimentStyles, 250);
-    setTimeout(removeHeroExperimentStyles, 800);
-    setTimeout(removeHeroExperimentStyles, 1800);
+
+    const stage = document.querySelector(".frame-hero-stage");
+
+    if (!stage || stage.dataset.heroMode === "solo-chaos") {
+      return;
+    }
+
+    stage.innerHTML = heroStageMarkup;
+    stage.dataset.heroMode = "solo-chaos";
   };
 
-  keepOriginalHeroes();
+  const keepChaosHeroes = () => {
+    restoreChaosHeroes();
+    requestAnimationFrame(restoreChaosHeroes);
+    setTimeout(restoreChaosHeroes, 50);
+    setTimeout(restoreChaosHeroes, 250);
+    setTimeout(restoreChaosHeroes, 800);
+    setTimeout(restoreChaosHeroes, 1800);
+  };
+
+  keepChaosHeroes();
 
   const baseScript = document.createElement("script");
   baseScript.src = "https://cdn.jsdelivr.net/gh/Silituz/Marty-Ann@a6f231b1ffa68ea111ac905746e2db7a92c6edc1/script.js";
   baseScript.async = false;
-  baseScript.addEventListener("load", keepOriginalHeroes, { once: true });
+  baseScript.addEventListener("load", keepChaosHeroes, { once: true });
   document.currentScript.after(baseScript);
 
   const fileNameFrom = (src) => {
@@ -105,7 +133,7 @@
   };
 
   document.addEventListener("click", async (event) => {
-    keepOriginalHeroes();
+    keepChaosHeroes();
 
     const downloadButton = event.target.closest("#modalDownload");
 
@@ -145,15 +173,15 @@
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      keepOriginalHeroes();
+      keepChaosHeroes();
       observePreview();
       hideDownload();
     });
   } else {
-    keepOriginalHeroes();
+    keepChaosHeroes();
     observePreview();
     hideDownload();
   }
 
-  window.addEventListener("load", keepOriginalHeroes, { once: true });
+  window.addEventListener("load", keepChaosHeroes, { once: true });
 })();
