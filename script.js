@@ -39,6 +39,8 @@
   const photoCount = 23;
   let currentPhotoNumber = 1;
   let lastEndingEffectKey = "";
+  let endingObserverReady = false;
+  let wishObserverReady = false;
 
   const removeHeroExperimentStyles = () => {
     document.querySelectorAll("style").forEach((style) => {
@@ -298,36 +300,44 @@
     }, 1850);
   };
 
+  const triggerEndingEffectIfOpen = () => {
+    const modal = document.querySelector("dialog.ending-modal");
+
+    if (!modal) {
+      return;
+    }
+
+    if (!modal.open) {
+      modal.dataset.effectRun = "";
+      return;
+    }
+
+    const type = modal.classList.contains("ending-villain")
+      ? "villain"
+      : modal.classList.contains("ending-normal")
+        ? "normal"
+        : "good";
+
+    if (modal.dataset.effectRun === type) {
+      return;
+    }
+
+    modal.dataset.effectRun = type;
+    startEndingEffect(type);
+  };
+
   const watchEndingModals = () => {
-    const maybeStart = () => {
-      const modal = document.querySelector("dialog.ending-modal[open]");
+    if (!endingObserverReady) {
+      new MutationObserver(triggerEndingEffectIfOpen).observe(document.body, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        attributeFilter: ["class", "open"]
+      });
+      endingObserverReady = true;
+    }
 
-      if (!modal) {
-        return;
-      }
-
-      const type = modal.classList.contains("ending-villain")
-        ? "villain"
-        : modal.classList.contains("ending-normal")
-          ? "normal"
-          : "good";
-      const effectKey = `${type}-${modal.getAttribute("open")}-${modal.dataset.effectRun || ""}`;
-
-      if (modal.dataset.effectRun === effectKey) {
-        return;
-      }
-
-      modal.dataset.effectRun = effectKey;
-      startEndingEffect(type);
-    };
-
-    new MutationObserver(maybeStart).observe(document.body, {
-      attributes: true,
-      childList: true,
-      subtree: true,
-      attributeFilter: ["class", "open"]
-    });
-    maybeStart();
+    triggerEndingEffectIfOpen();
   };
 
   const observePreview = () => {
@@ -355,12 +365,13 @@
 
     const wishModal = document.querySelector("#wishCompleteModal");
 
-    if (wishModal) {
+    if (wishModal && !wishObserverReady) {
       new MutationObserver(cleanFavoritePersonEmoji).observe(wishModal, {
         childList: true,
         subtree: true,
         characterData: true
       });
+      wishObserverReady = true;
     }
   };
 
