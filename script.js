@@ -1,21 +1,35 @@
 (() => {
+  const EXPERIMENT_STYLE_MARKERS = [
+    "separatedWebPatrol",
+    "heroStrideA",
+    "separatedPrankDash",
+    "separatedFlyerLoop",
+    "separatedShieldRun"
+  ];
+
   const removeHeroExperimentStyles = () => {
     document.querySelectorAll("style").forEach((style) => {
-      if (
-        style.textContent.includes("separatedWebPatrol")
-        || style.textContent.includes("heroStrideA")
-        || style.textContent.includes("separatedPrankDash")
-      ) {
+      if (EXPERIMENT_STYLE_MARKERS.some((marker) => style.textContent.includes(marker))) {
         style.remove();
       }
     });
   };
 
-  removeHeroExperimentStyles();
+  const keepOriginalHeroes = () => {
+    removeHeroExperimentStyles();
+    requestAnimationFrame(removeHeroExperimentStyles);
+    setTimeout(removeHeroExperimentStyles, 50);
+    setTimeout(removeHeroExperimentStyles, 250);
+    setTimeout(removeHeroExperimentStyles, 800);
+    setTimeout(removeHeroExperimentStyles, 1800);
+  };
+
+  keepOriginalHeroes();
 
   const baseScript = document.createElement("script");
   baseScript.src = "https://cdn.jsdelivr.net/gh/Silituz/Marty-Ann@a6f231b1ffa68ea111ac905746e2db7a92c6edc1/script.js";
   baseScript.async = false;
+  baseScript.addEventListener("load", keepOriginalHeroes, { once: true });
   document.currentScript.after(baseScript);
 
   const fileNameFrom = (src) => {
@@ -91,6 +105,8 @@
   };
 
   document.addEventListener("click", async (event) => {
+    keepOriginalHeroes();
+
     const downloadButton = event.target.closest("#modalDownload");
 
     if (!downloadButton) {
@@ -129,12 +145,15 @@
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      removeHeroExperimentStyles();
+      keepOriginalHeroes();
       observePreview();
       hideDownload();
     });
   } else {
+    keepOriginalHeroes();
     observePreview();
     hideDownload();
   }
+
+  window.addEventListener("load", keepOriginalHeroes, { once: true });
 })();
