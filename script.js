@@ -8,18 +8,16 @@
   ];
 
   const heroStageMarkup = `
-    <span class="frame-web-line web-shot-one"></span>
-    <span class="frame-web-line web-shot-two"></span>
     <span class="impact-puff puff-one">BAM</span>
     <span class="impact-puff puff-two">ZAP</span>
-    <span class="frame-hero hero-web"><span></span></span>
-    <span class="frame-hero hero-mystic"><span></span></span>
-    <span class="frame-hero hero-red"><span></span></span>
-    <span class="frame-hero hero-shadow"><span></span></span>
-    <span class="frame-hero hero-metal"><span></span></span>
-    <span class="frame-hero hero-green"><span></span></span>
-    <span class="frame-hero hero-shield"><span></span></span>
-    <span class="frame-hero hero-hammer"><span></span></span>
+    <span class="frame-hero hero-web"><span></span><i></i></span>
+    <span class="frame-hero hero-mystic"><span></span><i></i></span>
+    <span class="frame-hero hero-red"><span></span><i></i></span>
+    <span class="frame-hero hero-shadow"><span></span><i></i></span>
+    <span class="frame-hero hero-metal"><span></span><i></i></span>
+    <span class="frame-hero hero-green"><span></span><i></i></span>
+    <span class="frame-hero hero-shield"><span></span><i></i></span>
+    <span class="frame-hero hero-hammer"><span></span><i></i></span>
   `;
 
   const removeHeroExperimentStyles = () => {
