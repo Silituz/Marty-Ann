@@ -1,4 +1,18 @@
 (() => {
+  const removeHeroExperimentStyles = () => {
+    document.querySelectorAll("style").forEach((style) => {
+      if (
+        style.textContent.includes("separatedWebPatrol")
+        || style.textContent.includes("heroStrideA")
+        || style.textContent.includes("separatedPrankDash")
+      ) {
+        style.remove();
+      }
+    });
+  };
+
+  removeHeroExperimentStyles();
+
   const baseScript = document.createElement("script");
   baseScript.src = "https://cdn.jsdelivr.net/gh/Silituz/Marty-Ann@a6f231b1ffa68ea111ac905746e2db7a92c6edc1/script.js";
   baseScript.async = false;
@@ -8,6 +22,34 @@
     const cleanSrc = src.split("?")[0].split("#")[0];
     const name = decodeURIComponent(cleanSrc.split("/").pop() || "marty-ann-photo");
     return name.includes(".") ? name : `${name}.jpg`;
+  };
+
+  const hideDownload = () => {
+    const downloadButton = document.querySelector("#modalDownload");
+
+    if (!downloadButton) {
+      return;
+    }
+
+    downloadButton.hidden = true;
+    downloadButton.removeAttribute("href");
+    downloadButton.removeAttribute("download");
+  };
+
+  const syncDownload = () => {
+    const modalPreview = document.querySelector("#modalPreview");
+    const downloadButton = document.querySelector("#modalDownload");
+    const image = modalPreview?.querySelector("img");
+    const src = image?.getAttribute("src");
+
+    if (!downloadButton || !src) {
+      hideDownload();
+      return;
+    }
+
+    downloadButton.href = src;
+    downloadButton.download = fileNameFrom(src);
+    downloadButton.hidden = false;
   };
 
   async function forceDownload(src, filename) {
@@ -30,10 +72,33 @@
     setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
   }
 
+  const observePreview = () => {
+    const modal = document.querySelector("#photoModal");
+    const modalPreview = document.querySelector("#modalPreview");
+
+    if (!modalPreview) {
+      return;
+    }
+
+    new MutationObserver(syncDownload).observe(modalPreview, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["src"]
+    });
+
+    modal?.addEventListener("close", hideDownload);
+  };
+
   document.addEventListener("click", async (event) => {
     const downloadButton = event.target.closest("#modalDownload");
 
     if (!downloadButton) {
+      if (event.target.closest("[data-photo], [data-photo-key]")) {
+        setTimeout(syncDownload, 180);
+        setTimeout(syncDownload, 520);
+        setTimeout(syncDownload, 1000);
+      }
       return;
     }
 
@@ -61,4 +126,15 @@
       fallback.remove();
     }
   }, true);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      removeHeroExperimentStyles();
+      observePreview();
+      hideDownload();
+    });
+  } else {
+    observePreview();
+    hideDownload();
+  }
 })();
