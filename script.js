@@ -21,6 +21,7 @@
   `;
 
   const downloadSelector = "#modalDownload, #download-photo, .modal-download, .download-photo, [data-download-photo]";
+  let wishObserverReady = false;
 
   const removeHeroExperimentStyles = () => {
     document.querySelectorAll("style").forEach(style => {
@@ -95,14 +96,28 @@
   const cleanFavoritePersonEmoji = () => {
     document.querySelectorAll("#wishCompleteModal p").forEach(element => {
       if (element.textContent && element.textContent.includes("favorite person")) {
-        element.textContent = element.textContent.replace(/\s*[\u{1F970}\u{1F60D}]\s*/gu, " ").replace(/\s+/g, " ").trim();
+        element.textContent = element.textContent.replace(/[\u{1F970}\u{1F60D}]/gu, "").replace(/\s+/g, " ").trim();
       }
+    });
+  };
+
+  const observeWishPanel = () => {
+    if (wishObserverReady) return;
+    const panel = document.querySelector("#wishCompleteModal .secret-card");
+    if (!panel) return;
+
+    wishObserverReady = true;
+    new MutationObserver(cleanFavoritePersonEmoji).observe(panel, {
+      childList: true,
+      subtree: true,
+      characterData: true
     });
   };
 
   const setupLightEnhancements = () => {
     keepChaosHeroes();
     cleanFavoritePersonEmoji();
+    observeWishPanel();
     syncDownloadWithPreview();
   };
 
@@ -126,6 +141,12 @@
       syncDownloadWithPreview();
       event.preventDefault();
       forceDownload(downloadLink);
+      return;
+    }
+
+    if (event.target.closest("[data-reason]")) {
+      setTimeout(cleanFavoritePersonEmoji, 80);
+      setTimeout(cleanFavoritePersonEmoji, 220);
       return;
     }
 
