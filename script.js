@@ -21,6 +21,7 @@
   `;
 
   const downloadSelector = "#modalDownload, #download-photo, .modal-download, .download-photo, [data-download-photo]";
+  const favoriteEmojiPattern = /[\u{1F970}\u{1F60D}]/gu;
   let wishObserverReady = false;
 
   const removeHeroExperimentStyles = () => {
@@ -95,9 +96,15 @@
 
   const cleanFavoritePersonEmoji = () => {
     document.querySelectorAll("#wishCompleteModal p").forEach(element => {
-      if (element.textContent && element.textContent.includes("favorite person")) {
-        element.textContent = element.textContent.replace(/[\u{1F970}\u{1F60D}]/gu, "").replace(/\s+/g, " ").trim();
+      const text = element.textContent || "";
+      favoriteEmojiPattern.lastIndex = 0;
+
+      if (!text.includes("favorite person") || !favoriteEmojiPattern.test(text)) {
+        return;
       }
+
+      favoriteEmojiPattern.lastIndex = 0;
+      element.textContent = text.replace(favoriteEmojiPattern, "").replace(/\s+/g, " ").trim();
     });
   };
 
