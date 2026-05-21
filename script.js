@@ -20,7 +20,7 @@
     <span class="frame-hero hero-green"><span></span><i></i></span>
   `;
 
-  let wishObserverReady = false;
+  const downloadSelector = "#modalDownload, #download-photo, .modal-download, .download-photo, [data-download-photo]";
 
   const removeHeroExperimentStyles = () => {
     document.querySelectorAll("style").forEach(style => {
@@ -59,8 +59,8 @@
   };
 
   const syncDownloadWithPreview = () => {
-    const preview = document.querySelector("#photo-modal img, .photo-modal img, .gallery-modal img, .lightbox img");
-    const button = document.querySelector("#download-photo, .download-photo, [data-download-photo]");
+    const preview = document.querySelector("#photo-modal img, #photoModal img, .photo-modal img, .gallery-modal img, .lightbox img");
+    const button = document.querySelector(downloadSelector);
     if (!preview || !button || !preview.src) {
       hideDownloadWhenEmpty(button);
       return;
@@ -93,28 +93,16 @@
   };
 
   const cleanFavoritePersonEmoji = () => {
-    document.querySelectorAll("body *").forEach(element => {
-      if (!element.children.length && element.textContent && element.textContent.includes("favorite person")) {
+    document.querySelectorAll("#wishCompleteModal p").forEach(element => {
+      if (element.textContent && element.textContent.includes("favorite person")) {
         element.textContent = element.textContent.replace(/\s*[\u{1F970}\u{1F60D}]\s*/gu, " ").replace(/\s+/g, " ").trim();
       }
-    });
-  };
-
-  const observeWishPanel = () => {
-    if (wishObserverReady || !document.body) return;
-    wishObserverReady = true;
-
-    new MutationObserver(() => cleanFavoritePersonEmoji()).observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true
     });
   };
 
   const setupLightEnhancements = () => {
     keepChaosHeroes();
     cleanFavoritePersonEmoji();
-    observeWishPanel();
     syncDownloadWithPreview();
   };
 
@@ -133,7 +121,7 @@
   document.addEventListener("click", event => {
     keepChaosHeroes();
 
-    const downloadLink = event.target.closest("#download-photo, .download-photo, [data-download-photo]");
+    const downloadLink = event.target.closest(downloadSelector);
     if (downloadLink) {
       syncDownloadWithPreview();
       event.preventDefault();
